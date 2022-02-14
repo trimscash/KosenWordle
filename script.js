@@ -239,8 +239,8 @@ function printCorrect(flag){
 	tab.append("<div class='"+worlClass+"'>" + worl + "</div>")
 	tab.append("<div class='howmany'>試行回数: " + (nowLine+1) + "</div>")
 	tab.append('<a href="' + encoded + '"><div class="share"><img src="./Icon/circleTweet.png"></div></a>');
-	tweetButton.after('<a href="' + encoded + '"><div class="share2"><img src="./Icon/circleTweet.png"></div></a>')
 	realtab.delay(3000).fadeIn(500)
+	tweetButton.after('<a href="' + encoded + '"><div class="share2"><img src="./Icon/circleTweet.png"></div></a>')
 }
 
 function deleteTab(){
