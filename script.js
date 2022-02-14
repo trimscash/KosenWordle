@@ -1,11 +1,11 @@
-let playerAnsList = ["", "", "", "", "", "", "", ""]
+let playerAnsList = ["", "", "", "", "", "", ""]
 let ans=""
 let word=""
 let tilesWidth = 7
-let tilesHeight = 6
+let tilesHeight = 7
 let nowLine=0
 let nowStr=0
-let resultList=[[],[],[],[],[],[],[],[]]
+let resultList=[[],[],[],[],[],[],[]]
 let wordList
 let flag
 
