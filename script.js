@@ -243,7 +243,7 @@ function printCorrect(flag){
 }
 
 function deleteTab(){
-	let tab = $(".correctTab .Tab")
+	let tab = $(".correctTab")
 	tab.remove()
 }
 
