@@ -206,7 +206,7 @@ function hideWordListTab() {
 
 function printCorrect(flag){
 	let tab=$(".correctTab .Tab")
-	let tweetButton=$(".infoButton:nth-child(2)")
+	let tweetButton=$(".howTo")
 	let realtab=$(".correctTab")
 	let resultString="\n"
 	let worl="LOSE(笑)"
@@ -239,7 +239,7 @@ function printCorrect(flag){
 	tab.append("<div class='"+worlClass+"'>" + worl + "</div>")
 	tab.append("<div class='howmany'>試行回数: " + (nowLine+1) + "</div>")
 	tab.append('<a href="' + encoded + '"><div class="share"><img src="./Icon/circleTweet.png"></div></a>');
-	tweetButton.after('<a href="' + encoded + '"><div class="share"><img src="./Icon/circleTweet.png"></div></a>')
+	tweetButton.after('<a href="' + encoded + '"><div class="share2"><img src="./Icon/circleTweet.png"></div></a>')
 	realtab.delay(3000).fadeIn(500)
 }
 
