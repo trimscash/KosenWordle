@@ -217,7 +217,7 @@ function printCorrect(flag){
 			} else if (resultList[i][j] == 0) {
 				resultString += "⬜"
 			} else{
-				resultList += "🟨"
+				resultString += "🟨"
 			}
 		}
 		resultString+="\n"
