@@ -23,8 +23,8 @@ function getRand(min, max) {
 }
 
 function initArray(){
-	for(let i=0;i<tileHeight;i++){
-		for(let j=0;j<tileWidth;j++){
+	for(let i=0;i<tilesHeight;i++){
+		for(let j=0;j<tilesWidth;j++){
 			resultList[i][j]=0
 		}
 	}
