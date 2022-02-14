@@ -210,7 +210,7 @@ function printCorrect(flag){
 	let resultString="\n"
 	let worl="LOSE(笑)"
 	let worlClass="lose"
-	for(let i=0;i<tilesHeight;i++){
+	for(let i=0;i<nowLine+1;i++){
 		for(let j=0;j<tilesWidth;j++){
 			if (resultList[i][j] == 1) {
 				resultString += "🟩"
