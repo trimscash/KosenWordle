@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="apple-mobile-web-app-title" content="高専Wordle" />
+	<link rel="apple-touch-icon" sizes="144x144" href="./Icon/kosenWordleIcon.png" />
+	<link rel="manifest" href="./manifest.json" />
+
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="@uesuginiguseu">
+	<meta name="twitter:creater" content="@uesuginiguseu">
+	<meta property="og:url" content="https://trimscash.github.io/KosenWordle">
+	<meta property="og:title" content="高専Wordle" >
+	<meta property="og:description" content="高専の名前当てゲーム" >
+	<meta property="og:image" content="./Icon/kosenWordleIcon.png" >
+
+	<meta name="description" content="~~高専Wordle~~高専の学校名を当てるゲームです">
+
+	<meta name="viewport" content="width=300,initial-scale=1">
+
+	<link rel="icon" type="image/png" href="./Icon/kosenWordleIcon.png">
+	<meta charset="utf-8">
+	<title>高専Wordle</title>
+	<link href="./style.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+			crossorigin="anonymous"></script>
+	<script src="./script.js"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<div id="header">
+		<div class="title">高専Wordle</div>
+	</div>
+
+	<div id="main">
+		<div class="tiles">
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+			<div class="row">
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+				<div class="tile"></div>
+			</div>
+		</div>
+		<div class="keyBoard">
+			<div class="infoButtons">
+				<button class="howTo" onclick="showHowToTab()">遊び方</button>
+				<button class="wordList" onclick="showWordListTab()">高専リスト</button>
+			</div>
+			<div class="strKey">
+				<button onclick="keyBoard('あ')">あ</button>
+				<button onclick="keyBoard('い')">い</button>
+				<button onclick="keyBoard('う')">う</button>
+				<button onclick="keyBoard('え')">え</button>
+				<button onclick="keyBoard('お')">お</button>
+				<button onclick="keyBoard('か')">か</button>
+				<button onclick="keyBoard('き')">き</button>
+				<button onclick="keyBoard('く')">く</button>
+				<button onclick="keyBoard('け')">け</button>
+				<button onclick="keyBoard('こ')">こ</button>
+				<button onclick="keyBoard('さ')">さ</button>
+				<button onclick="keyBoard('し')">し</button>
+				<button onclick="keyBoard('す')">す</button>
+				<button onclick="keyBoard('せ')">せ</button>
+				<button onclick="keyBoard('そ')">そ</button>
+				<button onclick="keyBoard('た')">た</button>
+				<button onclick="keyBoard('ち')">ち</button>
+				<button onclick="keyBoard('つ')">つ</button>
+				<button onclick="keyBoard('て')">て</button>
+				<button onclick="keyBoard('と')">と</button>
+				<button onclick="keyBoard('な')">な</button>
+				<button onclick="keyBoard('に')">に</button>
+				<button onclick="keyBoard('ぬ')">ぬ</button>
+				<button onclick="keyBoard('ね')">ね</button>
+				<button onclick="keyBoard('の')">の</button>
+				<button onclick="keyBoard('は')">は</button>
+				<button onclick="keyBoard('ひ')">ひ</button>
+				<button onclick="keyBoard('ふ')">ふ</button>
+				<button onclick="keyBoard('へ')">へ</button>
+				<button onclick="keyBoard('ほ')">ほ</button>
+				<button onclick="keyBoard('ま')">ま</button>
+				<button onclick="keyBoard('み')">み</button>
+				<button onclick="keyBoard('も')">む</button>
+				<button onclick="keyBoard('め')">め</button>
+				<button onclick="keyBoard('も')">も</button>
+				<button onclick="keyBoard('や')">や</button>
+				<div class="padding"></div>
+				<button onclick="keyBoard('ゆ')">ゆ</button>
+				<div class="padding"></div>
+				<button onclick="keyBoard('よ')">よ</button>
+				<button onclick="keyBoard('ら')">ら</button>
+				<button onclick="keyBoard('り')">り</button>
+				<button onclick="keyBoard('る')">る</button>
+				<button onclick="keyBoard('れ')">れ</button>
+				<button onclick="keyBoard('ろ')">ろ</button>
+				<button onclick="keyBoard('わ')">わ</button>
+				<div class="padding"></div>
+				<button onclick="keyBoard('を')">を</button>
+				<div class="padding"></div>
+				<button onclick="keyBoard('ん')">ん</button>
+			</div>
+			<div class="controlKey">
+				<button onclick="keyBoard('E')">Enter</button>
+				<button onclick="keyBoard('B')">Back</button>
+			</div>
+
+		</div>
+		
+		<div class="errors">
+		</div>
+
+		<div hidden class="correctTab">
+			<button class="batu" onclick="deleteTab()"><div></div></button>
+				<div  class="Tab">
+				<div class="padding2"></div>
+			</div>
+		</div>
+
+		<div  class="howToTab">
+			<button class="batu" onclick="hideHowToTab()"><div></div></button>
+			<div class="Tab">
+				<div class="padding2"></div>
+				<div>基本は普通のWordleですが</div><br>
+				<div>同じ文字が答えにいくつかある場合<div style="font-size:1.2rem;">は<span style="color:#C9B458;">ブロー（黄色）</span>は<span style="color:#6AAA64;">ヒット（緑）</span>していない分だけ出てきます</div><br></div>
+				<div>高専名の回答方法は略称で"高専"を含めない<br>濁点，半濁点や拗音はすべて普通のひらがな<div style="font-size:1.2rem;">例: 国立東京工業高等専門学校=>東京高専=>とうきよう<br>都立産業技術工業高等専門学校=>産技高専=>さんき<br><span style="color: #89c98e;">詳しくは高専リストに</span></div></div>
+			</div>
+		</div>
+
+		<div hidden class="wordListTab">
+			<button class="batu" onclick="hideWordListTab()"><div></div></button>
+			<div class="Tab">
+				<div class="padding2"></div>
+			</div>
+		</div>
+	</div>
+
+	<div id="footer">
+		<div class="cash"><a href="https://github.com/trimscash/KosenGatya/">ソースコード/</a><a
+				href="https://twitter.com/uesuginiguseu">@uesuginiguseu</a><span style="font-size:1vh;">←誤り等</span></div>
+
+	</div>
+</body>
+</html>

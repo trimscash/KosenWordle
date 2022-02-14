@@ -1,0 +1,17 @@
+{
+  "name": "高専Wordle",
+  "short_name": "高専Wordle",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "高専の名前あてゲームです",
+  "icons": [{
+    "src": "./Icon/kosenWordleIcon.png",
+    "sizes": "1920x1920",
+    "type": "image/png"
+  }],
+  "related_applications": [{
+    "platform": "play",
+    "url": "https://trimscash.github.io/KosenWordle/"
+  }]
+}
