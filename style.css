@@ -265,6 +265,8 @@ body{
 }
 
 .infoButtons button{
+	
+	opacity: 50%;
 	padding:6px 6px;
 }
 
