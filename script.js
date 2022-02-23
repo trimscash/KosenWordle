@@ -136,9 +136,12 @@ function checkResult(result){
 	return flag
 }
 
-function printResult(result,playerAns){
+function printResult(result,playerAns){//いまわかったこの関数は不完全だともうやる気でないから直さないけどねゴミうんち！！うっひゃああああｗｗｗｗうんこ！！同じ文字できいろ，みどりってなったときこれだと緑になってしまう
+	//今までのリザルトで同じ文字で緑か黄色になってるやつの最大の個数を取得．そして，，その文字において今までの最大みどり・きいろ個数分みどりになっているときにキーボードのやつも緑にする．．という風にすべきだろうけどしてないめんどい
+	//でもここまで書きだしたらやれよって思うわ！？！？！？！？？うんこ！！！だめだやる気でねえ！！！！
 	let i=0
 	let row=$(".row")
+
 	let timerID=setInterval(()=>{
 		if (i > tilesWidth) {
 			clearInterval(timerID)
@@ -148,7 +151,6 @@ function printResult(result,playerAns){
 			if(playerAns[i]!=" "){		//buttonには" "の文字列を含むやつがないからここで除いてる
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
-				
 				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("correct")
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("correct")
