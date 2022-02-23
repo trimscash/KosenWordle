@@ -1,3 +1,6 @@
+//なんか関数名がゴミだけど許して怖い人，特に表示する関数とかshowとかprintとか統一すべきだったよな，，めんどいからもうしないけど，おこってツイッターでいきりながらさらすとかやめてね怖い人
+//バグがあるかもとくに表示するとこ
+//てかボタンだってわかるようなクラス名つけれ!おれ直さんけど!!
 let playerAnsList = ["", "", "", "", "", "", ""]
 let ans=""
 let word=""
@@ -65,7 +68,7 @@ function printError1(){//このきもいかもしれない関数名許せめん�
 	console.log("ワードリストにねえ")
 	$(".errors").prepend("<div class='error'>ワードリストにない高専です</div>")
 	setTimeout(()=>{
-			$(".error:last").remove()
+		$(".error:last").remove()
 	},1000,)
 }
 
@@ -140,19 +143,28 @@ function printResult(result,playerAns){
 		if (i > tilesWidth) {
 			clearInterval(timerID)
 		}
-
-		if(result[i]==1){
-			if(playerAns[i]!=" "){
+		
+		if(result[i]==1){		//きもい順番でごめん
+			if(playerAns[i]!=" "){		//buttonには" "の文字列を含むやつがないからここで除いてる
+				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
+				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
+				
 				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("correct")
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("correct")
 		}else if(result[i]==0){
 			if(playerAns[i]!=" "){
+				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
+				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
+				
 				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("incorrect")
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("incorrect")
-		}else{
+		}else if(result[i]==2){
 			if(playerAns[i]!=" "){
+				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
+				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
+				
 				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("half")
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("half")
@@ -204,9 +216,9 @@ function hideWordListTab() {
 	tab.hide()
 }
 
-function printCorrect(flag){
+function showCorrectTab(flag){
 	let tab=$(".correctTab .Tab")
-	let tweetButton=$(".howTo")
+	let tweetButton=$(".howTo")//ごめんこれツイートボタンではない
 	let realtab=$(".correctTab")
 	let resultString="\n"
 	let worl="LOSE(笑)"
@@ -240,7 +252,7 @@ function printCorrect(flag){
 	tab.append("<div class='howmany'>試行回数: " + (nowLine+1) + "</div>")
 	tab.append('<a href="' + encoded + '"><div class="share"><img src="./Icon/circleTweet.png"></div></a>');
 	realtab.delay(3000).fadeIn(500)
-	tweetButton.after('<a href="' + encoded + '"><div class="share2"><img src="./Icon/circleTweet.png"></div></a>')
+	tweetButton.delay(3000).after('<a href="' + encoded + '"><div class="share2"><img src="./Icon/circleTweet.png"></div></a>')
 }
 
 function deleteTab(){
@@ -249,19 +261,21 @@ function deleteTab(){
 }
 
 
-function keyBoard(key) {
+function keyBoard(key) {//ここがメインみたいなもん
 	if(nowLine<tilesHeight){
 		if(key=='E'&&flag!=1){
 			compAns(playerAnsList[nowLine], resultList[nowLine])
-			if(checkWord(playerAnsList[nowLine],resultList)){//ワードリストにあったら
+			if(checkWord(playerAnsList[nowLine],resultList)){//ワードリストにあったりなんとかしたら
+				
 				printResult(resultList[nowLine],playerAnsList[nowLine])
+				
 				if (checkResult(resultList[nowLine])) {
 					flag=1
 					console.log("WIN")
-					printCorrect(flag)
+					showCorrectTab(flag)
 				}else if(nowLine+1==tilesHeight){
 					console.log("LOSE")
-					printCorrect(flag)
+					showCorrectTab(flag)
 				}
 				nowLine++
 				nowStr=0
@@ -278,6 +292,4 @@ function keyBoard(key) {
 			nowStr++
 		}
 	}
-
-
 }
