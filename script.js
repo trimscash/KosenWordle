@@ -12,8 +12,6 @@ let resultList=[[],[],[],[],[],[],[]]
 let wordList
 let flag
 
-const usedChar = []
-
 const BLANK = ' '
 const INCORRECT = 0
 const CORRECT = 1
@@ -110,25 +108,27 @@ function compAns(playerAns,result){
 	// 一方で、一度しか出現しない文字を複数入力した場合で且つ場所も合っていない場合、最初の文字のみ黄色にする。
 
 	paddingedplayerAns.forEach((c, i) => {
-		usedChar.push(c)
 		if (c == paddingedAns[i]) {
 			// 完全一致
 			result[i] = CORRECT
 		} else {
 			// 部分一致
-			if (paddingedAns.indexOf(c) >= 0 && c != BLANK) {
-				// 何度出現するか?
-				const used_by_answer = paddingedAns.filter(e => e == c).length
-				const used_by_player = paddingedplayerAns.filter(e => e == c).length
-				// 既出ならば色を変えない
-				console.log(used_by_answer, used_by_player)
-				if (used_by_answer >= used_by_player) {
-					result[i] = HALF
-				} else {
-					result[i] = INCORRECT
-				}
-			} else {
-				// 一致しない
+			// その文字が正解文字列中のどこに出現しているかを調べる
+			const used_by_answer = paddingedAns.map((chara, index) => {
+				return chara == c ? index : -1
+			}).filter(index => index != -1)
+
+			// その文字が回答文字列中に何回出現しているかを調べる
+			const used_by_player = paddingedplayerAns.map((chara, index) => {
+				return chara == c ? index : -1
+			}).filter(index => index != -1)
+
+			console.log(c + 'が出現する場所は : ', used_by_answer, used_by_player)
+
+			// その文字が正解文字列中に何回出現するかを確認し、その回数を下回る場合は黄色にする
+			if ( used_by_player.slice(0, used_by_answer.length).filter(e => e == i).length > 0 ) {
+				result[i] = HALF
+			}else{
 				result[i] = INCORRECT
 			}
 		}
