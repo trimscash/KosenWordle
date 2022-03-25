@@ -34,26 +34,14 @@ function initArray(){
 }
 
 function loadJSON() {
-	$.ajax({
-			type: "GET",
-			url: "./wordList.json",
-			dataType: "json",
-			async: false
-		})
-		.then(
-		function (json) {
-			console.log("JSON OK")
-						wordList = json
-			let a = getRand(0, wordList.length)
-			ans=wordList[a].word
-			word=wordList[a].name
-
-			
-		},
-		function () {
-			console.log("failed to load")
-			alert("Sorry. failed to load..\nPlease reload")
-		})
+  fetch('wordList.json')
+    .then(response => response.json())
+    .then(json => {
+      wordList = json
+      const rndIndex = getRand(0, wordList.length)
+      ans = wordList[rndIndex].word
+      word = wordList[rndIndex].word
+    })
 }
 
 
