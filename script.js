@@ -96,17 +96,12 @@ function checkWord(playerAns,resultList){
 function compAns(playerAns,result){
 	playerAns=strPadding(playerAns, tilesWidth)
 	let paddingedAns=strPadding(ans, tilesWidth)
-	// console.log(ans)
+	console.log(ans)
 	for (let i = 0; i < playerAns.length; i++) { //まずは完全一致判定をする（優先順位上
 		for (let j = 0; j < paddingedAns.length; j++) {
 			if ((j == i) && (playerAns[i] == paddingedAns[j])) {
 				result[i] = 1 //完全一致
 			}
-		}
-	}
-	// console.log(result)
-	for (let i = 0; i < playerAns.length; i++) { //不完全一致
-		for (let j = 0; j < paddingedAns.length; j++) {
 			if ((result[i] != 1)&&(result[j]!=1 )) { //1になってるところとはもう比較しない　まだ文字の判定が０であるときかつ不完全一致するとき
 				if (playerAns[i] == paddingedAns[j]){
 					result[i] = 2 //不完全一致
