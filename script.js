@@ -52,7 +52,7 @@ function strPadding(str,num){
 	return str
 }
 
-function printError1(){//このきもいかもしれない関数名許せめんどいオーバーロードできないのかね
+function notExistWords(){
 	console.log("ワードリストにねえ")
 	$(".errors").prepend("<div class='error'>ワードリストにない高専です</div>")
 	setTimeout(()=>{
@@ -77,7 +77,7 @@ function checkWord(playerAns,resultList){
 		}
 	})
 	if(Flag==0){
-		printError1()
+		notExistWords()
 		return Flag
 	}
 	let paddingedAns = strPadding(ans, tilesWidth)
