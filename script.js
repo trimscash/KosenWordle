@@ -125,14 +125,23 @@ function compAns(playerAns,result){
 
 			console.log(c + 'が出現する場所は : ', used_by_answer, used_by_player)
 
-			// その文字が正解文字列中に何回出現するかを確認し、その回数を下回る場合は黄色にする
+			// その文字が正解文字列中に何回出現するかを確認する
 			if ( used_by_player.slice(0, used_by_answer.length).filter(e => e == i).length > 0 ) {
-				result[i] = HALF
+				// 回答文字列にその文字が出現している
+				if ( getIsDuplicate(used_by_answer, used_by_player)){
+					result[i] = INCORRECT
+				}else{
+					result[i] = HALF
+				}
 			}else{
 				result[i] = INCORRECT
 			}
 		}
 	})
+}
+
+function getIsDuplicate(arr1, arr2) {
+	return [...arr1, ...arr2].filter(item => arr1.includes(item) && arr2.includes(item)).length > 0
 }
 
 function checkResult(result){
@@ -185,7 +194,7 @@ function changeKeyboardState(state, chara){
 			key.removeClass("half")
 			key.addClass("incorrect")
 			break
-	case HALF:
+		case HALF:
 			if (key.hasClass("correct")) break
 			key.removeClass("incorrect")
 			key.removeClass("correct")
