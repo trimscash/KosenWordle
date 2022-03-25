@@ -12,6 +12,8 @@ let resultList=[[],[],[],[],[],[],[]]
 let wordList
 let flag
 
+const usedChar = []
+
 const BLANK = ' '
 const INCORRECT = 0
 const CORRECT = 1
@@ -101,6 +103,7 @@ function checkWord(playerAns,resultList){
 function compAns(playerAns,result){
 	const paddingedplayerAns = [...strPadding(playerAns, tilesWidth)]
 	const paddingedAns = [...strPadding(ans, tilesWidth)]
+	console.log(paddingedAns, paddingedplayerAns)
 
 	// MEMO:
 	// Wordleでは、同一の文字が複数出現する場合のみ、重複する2つ以上文字を黄色にする。
@@ -113,11 +116,12 @@ function compAns(playerAns,result){
 			result[i] = CORRECT
 		} else {
 			// 部分一致
-			if (paddingedAns.indexOf(c) >= 0) {
+			if (paddingedAns.indexOf(c) >= 0 && c != BLANK) {
 				// 何度出現するか?
 				const used_by_answer = paddingedAns.filter(e => e == c).length
-				const used_by_player = usedChar.filter(e => e == c).length
+				const used_by_player = paddingedplayerAns.filter(e => e == c).length
 				// 既出ならば色を変えない
+				console.log(used_by_answer, used_by_player)
 				if (used_by_answer >= used_by_player) {
 					result[i] = HALF
 				} else {
@@ -150,34 +154,42 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 			clearInterval(timerID)
 		}
 
-		if(result[i]==CORRECT){		//きもい順番でごめん
-			if(playerAns[i]!=BLANK){		//buttonには" "の文字列を含むやつがないからここで除いてる
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("correct")
-			}
-			row.eq(nowLine-1).find(".tile").eq(i).addClass("correct")
-		}else if(result[i]==INCORRECT){
-			if(playerAns[i]!=BLANK){
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
-
-				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("incorrect")
-			}
-			row.eq(nowLine-1).find(".tile").eq(i).addClass("incorrect")
-		}else if(result[i]==2){
-			if(playerAns[i]!=BLANK){
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
-
-				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("half")
-			}
-			row.eq(nowLine-1).find(".tile").eq(i).addClass("half")
+		switch(result[i]){
+			case CORRECT:
+				row.eq(nowLine-1).find(".tile").eq(i).addClass("correct")
+				break
+			case HALF:
+				row.eq(nowLine-1).find(".tile").eq(i).addClass("half")
+				break
+			case INCORRECT:
+				row.eq(nowLine-1).find(".tile").eq(i).addClass("incorrect")
+				break
 		}
 		i++
 	},300)
+
+	result.forEach((e, i) => changeKeyboardState(e, playerAns[i]))
 }
 
+function changeKeyboardState(state, chara){
+	switch(state){
+		case CORRECT:
+			$(".keyBoard button:contains('"+chara+"')").removeClass("incorrect")
+			$(".keyBoard button:contains('"+chara+"')").removeClass("half")
+			$(".keyBoard button:contains('"+chara+"')").addClass("correct")
+			break
+		case INCORRECT:
+			$(".keyBoard button:contains('"+chara+"')").removeClass("correct")
+			$(".keyBoard button:contains('"+chara+"')").removeClass("half")
+			$(".keyBoard button:contains('"+chara+"')").addClass("incorrect")
+			break
+		case HALF:
+			$(".keyBoard button:contains('"+chara+"')").removeClass("incorrect")
+			$(".keyBoard button:contains('"+chara+"')").removeClass("correct")
+			$(".keyBoard button:contains('"+chara+"')").addClass("half")
+			break
+	}
+}
 function printChar(key) {
 	let tiles = $(".tile")
 	tiles.eq(tilesWidth*(nowLine)+nowStr).append("<div class='tileChar'>" + key + "</div>")
