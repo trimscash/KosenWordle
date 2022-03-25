@@ -12,6 +12,11 @@ let resultList=[[],[],[],[],[],[],[]]
 let wordList
 let flag
 
+const BLANK = ' '
+const INCORRECT = 0
+const CORRECT = 1
+const HALF = 2
+
 $(document).ready(function () {
 	initArray()
 	loadJSON()
@@ -34,37 +39,25 @@ function initArray(){
 }
 
 function loadJSON() {
-	$.ajax({
-			type: "GET",
-			url: "./wordList.json",
-			dataType: "json",
-			async: false
-		})
-		.then(
-		function (json) {
-			console.log("JSON OK")
-						wordList = json
-			let a = getRand(0, wordList.length)
-			ans=wordList[a].word
-			word=wordList[a].name
-
-			
-		},
-		function () {
-			console.log("failed to load")
-			alert("Sorry. failed to load..\nPlease reload")
-		})
+  fetch('wordList.json')
+    .then(response => response.json())
+    .then(json => {
+      wordList = json
+      const rndIndex = getRand(0, wordList.length)
+      ans = wordList[rndIndex].word
+      word = wordList[rndIndex].word
+    })
 }
 
 
 function strPadding(str,num){
 	while(str.length!=num){
-		str+=" "
+		str+=BLANK
 	}
 	return str
 }
 
-function printError1(){//このきもいかもしれない関数名許せめんどいオーバーロードできないのかね
+function notExistWords(){
 	console.log("ワードリストにねえ")
 	$(".errors").prepend("<div class='error'>ワードリストにない高専です</div>")
 	setTimeout(()=>{
@@ -89,13 +82,13 @@ function checkWord(playerAns,resultList){
 		}
 	})
 	if(Flag==0){
-		printError1()
+		notExistWords()
 		return Flag
 	}
 	let paddingedAns = strPadding(ans, tilesWidth)
 	for(let i=0;i<nowLine;i++){
 		for(let j=0;j<tilesWidth;j++){
-			if((resultList[nowLine][j]!=1)&&(resultList[i][j]==1)&&(paddingedAns[j]!=" ")){//以前に1が出てるのに1じゃなかったら
+			if((resultList[nowLine][j]!=1)&&(resultList[i][j]==1)&&(paddingedAns[j]!=BLANK)){//以前に1が出てるのに1じゃなかったら
 				printError2(j)
 				return Flag=0
 			}
@@ -106,26 +99,49 @@ function checkWord(playerAns,resultList){
 }
 
 function compAns(playerAns,result){
-	playerAns=strPadding(playerAns, tilesWidth)
-	let paddingedAns=strPadding(ans, tilesWidth)
-	// console.log(ans)
-	for (let i = 0; i < playerAns.length; i++) { //まずは完全一致判定をする（優先順位上
-		for (let j = 0; j < paddingedAns.length; j++) {
-			if ((j == i) && (playerAns[i] == paddingedAns[j])) {
-				result[i] = 1 //完全一致
-			}
-		}
-	}
-	// console.log(result)
-	for (let i = 0; i < playerAns.length; i++) { //不完全一致
-		for (let j = 0; j < paddingedAns.length; j++) {
-			if ((result[i] != 1)&&(result[j]!=1 )) { //1になってるところとはもう比較しない　まだ文字の判定が０であるときかつ不完全一致するとき
-				if (playerAns[i] == paddingedAns[j]){
-					result[i] = 2 //不完全一致
+	const paddingedplayerAns = [...strPadding(playerAns, tilesWidth)]
+	const paddingedAns = [...strPadding(ans, tilesWidth)]
+	console.log(paddingedAns, paddingedplayerAns)
+
+	// MEMO:
+	// Wordleでは、同一の文字が複数出現する場合のみ、重複する2つ以上文字を黄色にする。
+	// 一方で、一度しか出現しない文字を複数入力した場合で且つ場所も合っていない場合、最初の文字のみ黄色にする。
+
+	paddingedplayerAns.forEach((c, i) => {
+		if (c == paddingedAns[i]) {
+			// 完全一致
+			result[i] = CORRECT
+		} else {
+			// 部分一致
+			// その文字が正解文字列中のどこに出現しているかを調べる
+			const used_by_answer = paddingedAns.map((chara, index) => {
+				return chara == c ? index : -1
+			}).filter(index => index != -1)
+
+			// その文字が回答文字列中に何回出現しているかを調べる
+			const used_by_player = paddingedplayerAns.map((chara, index) => {
+				return chara == c ? index : -1
+			}).filter(index => index != -1)
+
+			console.log(c + 'が出現する場所は : ', used_by_answer, used_by_player)
+
+			// その文字が正解文字列中に何回出現するかを確認する
+			if ( used_by_player.slice(0, used_by_answer.length).filter(e => e == i).length > 0 ) {
+				// 回答文字列にその文字が出現している
+				if ( getIsDuplicate(used_by_answer, used_by_player)){
+					result[i] = INCORRECT
+				}else{
+					result[i] = HALF
 				}
+			}else{
+				result[i] = INCORRECT
 			}
 		}
-	}
+	})
+}
+
+function getIsDuplicate(arr1, arr2) {
+	return [...arr1, ...arr2].filter(item => arr1.includes(item) && arr2.includes(item)).length > 0
 }
 
 function checkResult(result){
@@ -146,35 +162,46 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 		if (i > tilesWidth) {
 			clearInterval(timerID)
 		}
-		
-		if(result[i]==1){		//きもい順番でごめん
-			if(playerAns[i]!=" "){		//buttonには" "の文字列を含むやつがないからここで除いてる
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("correct")
-			}
-			row.eq(nowLine-1).find(".tile").eq(i).addClass("correct")
-		}else if(result[i]==0){
-			if(playerAns[i]!=" "){
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
-				
-				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("incorrect")
-			}
-			row.eq(nowLine-1).find(".tile").eq(i).addClass("incorrect")
-		}else if(result[i]==2){
-			if(playerAns[i]!=" "){
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
-				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
-				
-				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("half")
-			}
-			row.eq(nowLine-1).find(".tile").eq(i).addClass("half")
+
+		switch(result[i]){
+			case CORRECT:
+				row.eq(nowLine-1).find(".tile").eq(i).addClass("correct")
+				break
+			case HALF:
+				row.eq(nowLine-1).find(".tile").eq(i).addClass("half")
+				break
+			case INCORRECT:
+				row.eq(nowLine-1).find(".tile").eq(i).addClass("incorrect")
+				break
 		}
 		i++
 	},300)
+
+	result.forEach((e, i) => changeKeyboardState(e, playerAns[i]))
 }
 
+function changeKeyboardState(state, chara){
+	const key = $(".keyBoard button:contains('"+chara+"')")
+	switch(state){
+		case CORRECT:
+			key.removeClass("incorrect")
+			key.removeClass("half")
+			key.addClass("correct")
+			break
+		case INCORRECT:
+			if (key.hasClass("correct") || key.hasClass("half")) break
+			key.removeClass("correct")
+			key.removeClass("half")
+			key.addClass("incorrect")
+			break
+		case HALF:
+			if (key.hasClass("correct")) break
+			key.removeClass("incorrect")
+			key.removeClass("correct")
+			key.addClass("half")
+			break
+	}
+}
 function printChar(key) {
 	let tiles = $(".tile")
 	tiles.eq(tilesWidth*(nowLine)+nowStr).append("<div class='tileChar'>" + key + "</div>")
@@ -268,9 +295,9 @@ function keyBoard(key) {//ここがメインみたいなもん
 		if(key=='E'&&flag!=1){
 			compAns(playerAnsList[nowLine], resultList[nowLine])
 			if(checkWord(playerAnsList[nowLine],resultList)){//ワードリストにあったりなんとかしたら
-				
+
 				printResult(resultList[nowLine],playerAnsList[nowLine])
-				
+
 				if (checkResult(resultList[nowLine])) {
 					flag=1
 					console.log("WIN")
