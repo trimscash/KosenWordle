@@ -172,21 +172,24 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 }
 
 function changeKeyboardState(state, chara){
+	const key = $(".keyBoard button:contains('"+chara+"')")
 	switch(state){
 		case CORRECT:
-			$(".keyBoard button:contains('"+chara+"')").removeClass("incorrect")
-			$(".keyBoard button:contains('"+chara+"')").removeClass("half")
-			$(".keyBoard button:contains('"+chara+"')").addClass("correct")
+			key.removeClass("incorrect")
+			key.removeClass("half")
+			key.addClass("correct")
 			break
 		case INCORRECT:
-			$(".keyBoard button:contains('"+chara+"')").removeClass("correct")
-			$(".keyBoard button:contains('"+chara+"')").removeClass("half")
-			$(".keyBoard button:contains('"+chara+"')").addClass("incorrect")
+			if (key.hasClass("correct") || key.hasClass("half")) break
+			key.removeClass("correct")
+			key.removeClass("half")
+			key.addClass("incorrect")
 			break
-		case HALF:
-			$(".keyBoard button:contains('"+chara+"')").removeClass("incorrect")
-			$(".keyBoard button:contains('"+chara+"')").removeClass("correct")
-			$(".keyBoard button:contains('"+chara+"')").addClass("half")
+	case HALF:
+			if (key.hasClass("correct")) break
+			key.removeClass("incorrect")
+			key.removeClass("correct")
+			key.addClass("half")
 			break
 	}
 }
