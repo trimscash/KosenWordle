@@ -94,21 +94,36 @@ function checkWord(playerAns,resultList){
 }
 
 function compAns(playerAns,result){
-	playerAns=strPadding(playerAns, tilesWidth)
-	let paddingedAns=strPadding(ans, tilesWidth)
-	console.log(ans)
-	for (let i = 0; i < playerAns.length; i++) { //まずは完全一致判定をする（優先順位上
-		for (let j = 0; j < paddingedAns.length; j++) {
-			if ((j == i) && (playerAns[i] == paddingedAns[j])) {
-				result[i] = 1 //完全一致
-			}
-			if ((result[i] != 1)&&(result[j]!=1 )) { //1になってるところとはもう比較しない　まだ文字の判定が０であるときかつ不完全一致するとき
-				if (playerAns[i] == paddingedAns[j]){
-					result[i] = 2 //不完全一致
+	const paddingedplayerAns = [...strPadding(playerAns, tilesWidth)]
+	const paddingedAns = [...strPadding(ans, tilesWidth)]
+
+	// MEMO:
+	// Wordleでは、同一の文字が複数出現する場合のみ、重複する2つ以上文字を黄色にする。
+	// 一方で、一度しか出現しない文字を複数入力した場合で且つ場所も合っていない場合、最初の文字のみ黄色にする。
+
+	paddingedplayerAns.forEach((c, i) => {
+		usedChar.push(c)
+		if (c == paddingedAns[i]) {
+			// 完全一致
+			result[i] = 1
+		} else {
+			// 部分一致
+			if (paddingedAns.indexOf(c) >= 0) {
+				// 何度出現するか?
+				const used_by_answer = paddingedAns.filter(e => e == c).length
+				const used_by_player = usedChar.filter(e => e == c).length
+				// 既出ならば色を変えない
+				if (used_by_answer >= used_by_player) {
+					result[i] = 2
+				} else {
+					result[i] = 0
 				}
+			} else {
+				// 一致しない
+				result[i] = 0
 			}
 		}
-	}
+	})
 }
 
 function checkResult(result){
@@ -129,7 +144,7 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 		if (i > tilesWidth) {
 			clearInterval(timerID)
 		}
-		
+
 		if(result[i]==1){		//きもい順番でごめん
 			if(playerAns[i]!=" "){		//buttonには" "の文字列を含むやつがないからここで除いてる
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
@@ -141,7 +156,7 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 			if(playerAns[i]!=" "){
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
-				
+
 				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("incorrect")
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("incorrect")
@@ -149,7 +164,7 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 			if(playerAns[i]!=" "){
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
-				
+
 				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("half")
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("half")
@@ -251,9 +266,9 @@ function keyBoard(key) {//ここがメインみたいなもん
 		if(key=='E'&&flag!=1){
 			compAns(playerAnsList[nowLine], resultList[nowLine])
 			if(checkWord(playerAnsList[nowLine],resultList)){//ワードリストにあったりなんとかしたら
-				
+
 				printResult(resultList[nowLine],playerAnsList[nowLine])
-				
+
 				if (checkResult(resultList[nowLine])) {
 					flag=1
 					console.log("WIN")
