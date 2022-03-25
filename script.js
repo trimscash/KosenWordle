@@ -12,6 +12,11 @@ let resultList=[[],[],[],[],[],[],[]]
 let wordList
 let flag
 
+const BLANK = ' '
+const INCORRECT = 0
+const CORRECT = 1
+const HALF = 2
+
 $(document).ready(function () {
 	initArray()
 	loadJSON()
@@ -47,7 +52,7 @@ function loadJSON() {
 
 function strPadding(str,num){
 	while(str.length!=num){
-		str+=" "
+		str+=BLANK
 	}
 	return str
 }
@@ -83,7 +88,7 @@ function checkWord(playerAns,resultList){
 	let paddingedAns = strPadding(ans, tilesWidth)
 	for(let i=0;i<nowLine;i++){
 		for(let j=0;j<tilesWidth;j++){
-			if((resultList[nowLine][j]!=1)&&(resultList[i][j]==1)&&(paddingedAns[j]!=" ")){//以前に1が出てるのに1じゃなかったら
+			if((resultList[nowLine][j]!=1)&&(resultList[i][j]==1)&&(paddingedAns[j]!=BLANK)){//以前に1が出てるのに1じゃなかったら
 				printError2(j)
 				return Flag=0
 			}
@@ -105,7 +110,7 @@ function compAns(playerAns,result){
 		usedChar.push(c)
 		if (c == paddingedAns[i]) {
 			// 完全一致
-			result[i] = 1
+			result[i] = CORRECT
 		} else {
 			// 部分一致
 			if (paddingedAns.indexOf(c) >= 0) {
@@ -114,13 +119,13 @@ function compAns(playerAns,result){
 				const used_by_player = usedChar.filter(e => e == c).length
 				// 既出ならば色を変えない
 				if (used_by_answer >= used_by_player) {
-					result[i] = 2
+					result[i] = HALF
 				} else {
-					result[i] = 0
+					result[i] = INCORRECT
 				}
 			} else {
 				// 一致しない
-				result[i] = 0
+				result[i] = INCORRECT
 			}
 		}
 	})
@@ -145,15 +150,15 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 			clearInterval(timerID)
 		}
 
-		if(result[i]==1){		//きもい順番でごめん
-			if(playerAns[i]!=" "){		//buttonには" "の文字列を含むやつがないからここで除いてる
+		if(result[i]==CORRECT){		//きもい順番でごめん
+			if(playerAns[i]!=BLANK){		//buttonには" "の文字列を含むやつがないからここで除いてる
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
 				$(".keyBoard button:contains('"+playerAns[i]+"')").addClass("correct")
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("correct")
-		}else if(result[i]==0){
-			if(playerAns[i]!=" "){
+		}else if(result[i]==INCORRECT){
+			if(playerAns[i]!=BLANK){
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("half")
 
@@ -161,7 +166,7 @@ function printResult(result,playerAns){//いまわかったこの関数は不完
 			}
 			row.eq(nowLine-1).find(".tile").eq(i).addClass("incorrect")
 		}else if(result[i]==2){
-			if(playerAns[i]!=" "){
+			if(playerAns[i]!=BLANK){
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("incorrect")
 				$(".keyBoard button:contains('"+playerAns[i]+"')").removeClass("correct")
 
