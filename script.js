@@ -276,7 +276,7 @@ function showCorrectTab(flag){
 	let encoded = "https://twitter.com/intent/tweet?&text=%20%23" + hashtag + "%20" + resultString + "&url=" + url;
 
 	tab.append("<div class='ans'>答え: " + ans + "</div>")
-	tab.append("<div class='word'>" + name + "</div>")
+	tab.append("<div class='name'>" + name + "</div>")
 	tab.append("<div class='"+worlClass+"'>" + worl + "</div>")
 	tab.append("<div class='howmany'>試行回数: " + (nowLine+1) + "</div>")
 	tab.append('<a href="' + encoded + '"><div class="share"><img src="./Icon/circleTweet.png"></div></a>');
