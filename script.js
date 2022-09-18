@@ -3,7 +3,7 @@
 //てかボタンだってわかるようなクラス名つけれ!おれ直さんけど!!
 let playerAnsList = ["", "", "", "", "", "", ""]
 let ans=""
-let word=""
+let name=""
 let tilesWidth = 7
 let tilesHeight = 7
 let nowLine=0
@@ -45,7 +45,7 @@ function loadJSON() {
       wordList = json
       const rndIndex = getRand(0, wordList.length)
       ans = wordList[rndIndex].word
-      word = wordList[rndIndex].word
+      name=wordList[rndIndex].name
     })
 }
 
@@ -264,7 +264,7 @@ function showCorrectTab(flag){
 		}
 		resultString+="\n"
 	}
-	resultString+="\n答え: "+word+"\n"
+	resultString+="\n答え: "+ans+"\n"+name+"\n"
 	if(flag){
 		worl="WIN!"
 		worlClass="win"
@@ -276,7 +276,7 @@ function showCorrectTab(flag){
 	let encoded = "https://twitter.com/intent/tweet?&text=%20%23" + hashtag + "%20" + resultString + "&url=" + url;
 
 	tab.append("<div class='ans'>答え: " + ans + "</div>")
-	tab.append("<div class='word'>" + word + "</div>")
+	tab.append("<div class='word'>" + name + "</div>")
 	tab.append("<div class='"+worlClass+"'>" + worl + "</div>")
 	tab.append("<div class='howmany'>試行回数: " + (nowLine+1) + "</div>")
 	tab.append('<a href="' + encoded + '"><div class="share"><img src="./Icon/circleTweet.png"></div></a>');
